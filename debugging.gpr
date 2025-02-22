@@ -1,0 +1,8 @@
+project Debugging is
+    Source_Directory := Project'Project_Dir & "\src";
+    for Languages use ("Ada");
+    for Source_Dirs use (Source_Directory);
+    for Source_Files use ("myprocess.adb");
+    for Main use ("myprocess.adb"); 
+    for Object_Dir use "obj";
+end Debugging;

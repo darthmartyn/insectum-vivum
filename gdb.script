@@ -1,0 +1,11 @@
+break myprocess.adb:14
+break myprocess.adb:20
+continue
+print Incrementing_Variable
+print Has_Been_Debugged
+set var Has_Been_Debugged := True
+continue
+print Incrementing_Variable
+print Has_Been_Debugged
+continue
+exit 0

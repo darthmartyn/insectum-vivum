@@ -1,0 +1,12 @@
+Run from CMD.exe
+
+> make gdb
+{best solution}
+
+> make gs
+{works well}
+
+> make vs
+{work in progress}
+
+
