@@ -39,7 +39,7 @@ elseif ($debugger -eq "vscode") {
     $launch.configurations[0].processid = "$($Component_1_PID)"
     ConvertTo-Json -InputObject $launch -Depth 10 | Set-Content -Path ".vscode\launch.json"
 
-    Start-Process code -ArgumentList "." -Wait -NoNewWindow
+    Start-Process code -ArgumentList ". --goto src\myprocess.adb" -Wait -NoNewWindow
 
     Start-Sleep -Seconds 1
     Get-Process | Where-Object {$_.id -eq $Component_1_PID} | Select-Object -First 1 | Stop-Process
