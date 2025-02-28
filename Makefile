@@ -5,10 +5,10 @@ build: clean
 	gprbuild -g -p -P debugging.gpr
 
 gdb: build
-	DEBUGGER=gdb powershell -File live-debug.ps1
+	powershell -File live-debug.ps1 -debugger "gdb"
 
 gs: build
-	DEBUGGER=gnatstudio powershell -File live-debug.ps1
+	powershell -File live-debug.ps1 -debugger "gnatstudio"
 
 vs: build
-	DEBUGGER=vscode powershell -File live-debug.ps1
+	powershell -File live-debug.ps1 -debugger "vscode"
