@@ -33,20 +33,13 @@ elseif ($debugger -eq "gnatstudio") {
 }
 elseif ($debugger -eq "vscode") {
 
-    New-Item -Path ".vscode" -Force -ItemType Directory | Out-Null
-    Get-ChildItem .vscode -Include launch.json -Recurse | Remove-Item
+    Get-ChildItem .vscode -Include launch-.json -Recurse | Remove-Item
+    $launch = Get-ChildItem .vscode -Include launch-template.json -Recurse | Get-Content -Raw | ConvertFrom-Json
 
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject "{"
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject """configurations"": ["
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject "{"
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject """type"": ""ada"","
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject """request"": ""attach"","
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject """program"": ""$($Component_1)"","
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject """processId"": ""$($Component_1_PID)"","   
+    $launch.configurations[0].processid = "$($Component_1_PID)"
+    ConvertTo-Json -InputObject $launch -Depth 10 | Set-Content -Path ".vscode\launch.json"
 
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject "}"
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject "]"
-    Out-File -FilePath ".vscode\launch.json" -Force -Append -Encoding "ascii" -InputObject "}"
+    Start-Process code -ArgumentList "." -Wait -NoNewWindow
 
     Start-Sleep -Seconds 1
     Get-Process | Where-Object {$_.id -eq $Component_1_PID} | Select-Object -First 1 | Stop-Process
