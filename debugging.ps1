@@ -1,5 +1,10 @@
 param ([string[]]$debugger = 'gdb')
 
+function Write-GSPY {
+    param ([string[]]$script = '')
+    Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject $script
+}
+
 $Component_1 = Join-Path $PSScriptRoot "\obj\myprocess.exe"
 
 if (Test-Path -Path $($Component_1))
@@ -18,14 +23,14 @@ if (Test-Path -Path $($Component_1))
     {
         Get-ChildItem obj -Include gs.py -Recurse | Remove-Item
 
-        Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "import GPS;"
-        Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "d = GPS.Debugger.get(1)"
-        Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "d.send(""file \obj\myprocess.exe"")"
-        Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "f = GPS.File(""myprocess.adb"")"
-        Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "d.send(""attach $($Component_1_PID)"")"
-        Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "d.break_at_location (f,15)"
-        Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "d.break_at_location (f,22)"
-        Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "d.send(""continue"")"
+        Write-GSPY -script "import GPS;"
+        Write-GSPY -script "d = GPS.Debugger.get(1)"
+        Write-GSPY -script "d.send(""file \obj\myprocess.exe"")"
+        Write-GSPY -script "f = GPS.File(""myprocess.adb"")"
+        Write-GSPY -script "d.send(""attach $($Component_1_PID)"")"
+        Write-GSPY -script "d.break_at_location (f,15)"
+        Write-GSPY -script "d.break_at_location (f,22)"
+        Write-GSPY -script "d.send(""continue"")"
 
         Start-Process gnatstudio -ArgumentList "--debug --load=python:""obj\gs.py"" -P debugging.gpr" -Wait
 
