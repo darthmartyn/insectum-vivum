@@ -11,6 +11,8 @@ if (Test-Path -Path $($Component_1))
     if ($debugger -eq "gdb")
     {   
         Start-Process gdb -ArgumentList "-iex=""attach $($Component_1_PID)"" --command=gdb.script" -NoNewWindow -Wait
+        Start-Sleep -Seconds 1
+        Get-Process | Where-Object {$_.id -eq $Component_1_PID} | Select-Object -First 1 | Stop-Process
     }
     elseif ($debugger -eq "gnatstudio")
     {
@@ -26,6 +28,9 @@ if (Test-Path -Path $($Component_1))
         Out-File -FilePath ".\obj\gs.py" -Force -Append -Encoding "ascii" -InputObject "d.send(""continue"")"
 
         Start-Process gnatstudio -ArgumentList "--debug --load=python:""obj\gs.py"" -P debugging.gpr" -Wait
+
+        Start-Sleep -Seconds 1
+        Get-Process | Where-Object {$_.id -eq $Component_1_PID} | Select-Object -First 1 | Stop-Process
     }
     elseif ($debugger -eq "vscode")
     {
@@ -36,9 +41,9 @@ if (Test-Path -Path $($Component_1))
         ConvertTo-Json -InputObject $launch -Depth 10 | Set-Content -Path ".vscode\launch.json"
         Start-Sleep -Seconds 1
 
-        Start-Process code -ArgumentList "-n -g .\src\myprocess.adb:1 $($PSScriptRoot)" -Wait
-    }
+        Start-Process code -ArgumentList "--wait --new-window --goto .\src\myprocess.adb:20 $($PSScriptRoot)" -Wait
 
-    Start-Sleep -Seconds 1
-    Get-Process | Where-Object {$_.id -eq $Component_1_PID} | Select-Object -First 1 | Stop-Process
+        Start-Sleep -Seconds 1
+        Get-Process | Where-Object {$_.id -eq $Component_1_PID} | Select-Object -First 1 | Stop-Process
+    }
 }
