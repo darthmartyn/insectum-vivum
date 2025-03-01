@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Ada: Attach debugger to running process - src/myprocess.adb",
+            "name": "Ada: Attach debugger to running process",
             "type": "cppdbg",
             "request": "attach",
             "program": "${workspaceFolder}/obj/myprocess.exe",
