@@ -1,14 +1,10 @@
 clean:
-	gprclean -ws -q -P debugging.gpr
-
+	rm -rf obj
 build: clean
 	gprbuild -g -p -P debugging.gpr
-
 gdb: build
-	powershell -File live-debug.ps1 -debugger "gdb"
-
+	powershell -File debugging.ps1 -debugger "gdb"
 gs: build
-	powershell -File live-debug.ps1 -debugger "gnatstudio"
-
+	powershell -File debugging.ps1 -debugger "gnatstudio"
 vs: build
-	powershell -File live-debug.ps1 -debugger "vscode"
+	powershell -File debugging.ps1 -debugger "vscode"
