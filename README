@@ -1,5 +1,1 @@
-Supports connecting to a running Ada program from a choice of 3 different debuggers
-
-make gdb  => GDB command line
-make gs   => GNAT Studio Debugger
-make vs   => VS Code Debugger
+Supports connecting to a running Ada program from VS Code
